@@ -16,7 +16,7 @@ WORKDIR /app
 
 COPY --from=builder /app/package*.json ./
 
-RUN npm i --omit=dev && i -g pm2
+RUN npm i --omit=dev && npm i -g pm2
 
 COPY --from=builder /app/dist ./dist/
 
