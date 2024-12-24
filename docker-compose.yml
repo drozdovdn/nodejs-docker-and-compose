@@ -33,7 +33,7 @@ services:
     container_name: database-container
     image: postgres:12
     volumes:
-      - "./pg_data:/var/lib/postgresql/data"
+      - "/home/dima/pg_data:/var/lib/postgresql/data"
     networks:
       - internal-network
     env_file:
