@@ -23,11 +23,7 @@ async function bootstrap() {
 
   app.use(helmet());
   // Настраиваем CORS
-  app.enableCors({
-    origin: 'http://localhost:3000', // Адрес фронтенда
-    methods: 'GET,PATCH,POST,DELETE', // Разрешённые методы
-    credentials: true, // Если требуется отправка cookies
-  });
+  app.enableCors();
 
   app.useGlobalInterceptors(
     new ClassSerializerInterceptor(app.get(Reflector), {

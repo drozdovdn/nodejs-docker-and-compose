@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller';
@@ -16,16 +16,20 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'student',
-      password: 'student',
-      database: 'kupipodariday',
-      entities: [User, Offer, Wish, Wishlist],
-      synchronize: true,
-    }),
+      TypeOrmModule.forRootAsync({
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService ) => ({
+             type: 'postgres',
+             host: configService.get<string>('POSTGRES_HOST'),
+             port: configService.get<number>('POSTGRES_PORT'),
+             username: configService.get<string>('POSTGRES_USER'),
+             password: configService.get<string>('POSTGRES_PASSWORD'),
+             database: configService.get<string>('POSTGRES_DB'),
+             entities: [User, Offer, Wish, Wishlist],
+             synchronize: true,
+        }),
+        inject: [ConfigService],
+      }),
     ConfigModule.forRoot({
       isGlobal: true, // Делаем ConfigModule глобальным, чтобы он был доступен во всех модулях
       envFilePath: '.env', // Указываем путь к файлу .env (по умолчанию корень проекта)
