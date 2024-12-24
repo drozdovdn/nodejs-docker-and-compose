@@ -15,7 +15,7 @@ services:
       - database
     env_file:
       - .env
-    restart: unless-stopped
+    restart: on-failure
 
   frontend:
     container_name: frontend-container
@@ -27,18 +27,18 @@ services:
       - internet
     ports:
       - "8081:80"
-    restart: unless-stopped
+    restart: on-failure
 
   database:
     container_name: database-container
-    image: postgres:13
+    image: postgres:12
     volumes:
-      - "./postgres_data:/data/postgres"
+      - "./pg_data:/var/lib/postgresql/data"
     networks:
       - internal-network
     env_file:
       - .env
-    restart: unless-stopped
+    restart: on-failure
 
 networks:
   internal-network:
@@ -46,6 +46,3 @@ networks:
     internal: true
   internet:
     driver: bridge
-
-volumes:
-  postgres_data:
